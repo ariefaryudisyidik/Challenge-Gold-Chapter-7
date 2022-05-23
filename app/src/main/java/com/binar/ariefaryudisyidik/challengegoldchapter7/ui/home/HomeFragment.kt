@@ -6,30 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.binar.ariefaryudisyidik.challengegoldchapter7.R
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.remote.response.Movie
 import com.binar.ariefaryudisyidik.challengegoldchapter7.databinding.FragmentHomeBinding
-import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.UserDataStoreManager
-import com.binar.ariefaryudisyidik.challengegoldchapter7.viewmodel.MovieViewModel
-import com.binar.ariefaryudisyidik.challengegoldchapter7.viewmodel.UserViewModel
-import com.binar.ariefaryudisyidik.challengegoldchapter7.viewmodel.ViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val movieViewModel by viewModels<MovieViewModel>()
-//    private val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
-    private val args: HomeFragmentArgs by navArgs()
-
-    //    private lateinit var userPreferences: UserPreferences
-    private lateinit var viewModel: UserViewModel
-    private lateinit var pref: UserDataStoreManager
+    private val viewModel: HomeViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,23 +31,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        userPreferences = UserPreferences(requireContext())
-//        binding.tvUsername.text = "Welcome, ${userPreferences.getLoggedInUser()}!"
-        pref = UserDataStoreManager(requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
+        viewModel.getUserId().observe(viewLifecycleOwner) {
+            viewModel.setUserId(it)
+        }
 
-//        viewModel.getUsername().observe(viewLifecycleOwner) {
-//            binding.tvUsername.text = "Welcome, $it!"
-//        }
-        viewModel.getId().observe(viewLifecycleOwner) {
-            if (it != 0) {
-//                val user = userRepositoryViewModel.getUser(it)
-//                binding.tvUsername.text = "Welcome, ${user.username}!"
+        viewModel.userData.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.tvUsername.text = "Welcome, ${user.username}!"
             }
         }
 
-        movieViewModel.movie.observe(viewLifecycleOwner) { setMovieData(it) }
-        movieViewModel.isLoading.observe(viewLifecycleOwner) { showLoading(it) }
+        viewModel.movie.observe(viewLifecycleOwner) { setMovieData(it) }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { showLoading(it) }
+
         binding.ibProfile.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
         }

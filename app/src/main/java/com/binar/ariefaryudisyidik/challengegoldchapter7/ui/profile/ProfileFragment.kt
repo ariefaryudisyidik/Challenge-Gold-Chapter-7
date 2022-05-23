@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.binar.ariefaryudisyidik.challengegoldchapter7.R
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.local.User
@@ -20,8 +19,6 @@ import com.binar.ariefaryudisyidik.challengegoldchapter7.databinding.FragmentPro
 import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.ImageHelper
 import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.UserDataStoreManager
 import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.UserPreferences
-import com.binar.ariefaryudisyidik.challengegoldchapter7.viewmodel.UserViewModel
-import com.binar.ariefaryudisyidik.challengegoldchapter7.viewmodel.ViewModelFactory
 
 class ProfileFragment : Fragment() {
 
@@ -30,7 +27,8 @@ class ProfileFragment : Fragment() {
 //    private val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
 
     private lateinit var userPreferences: UserPreferences
-    private lateinit var viewModel: UserViewModel
+
+    //    private lateinit var viewModel: UserViewModel
     private lateinit var pref: UserDataStoreManager
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var bitmap: Bitmap
@@ -55,7 +53,7 @@ class ProfileFragment : Fragment() {
 
         userPreferences = UserPreferences(requireContext())
         pref = UserDataStoreManager(requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
+//        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
 
         showProfile()
 
@@ -87,30 +85,30 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateProfile() {
-        viewModel.getId().observe(viewLifecycleOwner) {
+//        viewModel.getId().observe(viewLifecycleOwner) {
 
 //            val user = userRepositoryViewModel.getUser(it)
-            binding.apply {
-                val updateUser = User(
+        binding.apply {
+            val updateUser = User(
 //                    id = user.id,
 //                    email = user.email,
 //                    password = user.password,
-                    username = edtUsername.text.toString(),
-                    fullName = edtFullName.text.toString(),
-                    dateOfBirth = edtDateOfBirth.text.toString(),
-                    address = edtAddress.text.toString(),
-                    imageProfile = ImageHelper().convert(bitmap)
-                )
-                reset()
+                username = edtUsername.text.toString(),
+                fullName = edtFullName.text.toString(),
+                dateOfBirth = edtDateOfBirth.text.toString(),
+                address = edtAddress.text.toString(),
+                imageProfile = ImageHelper().convert(bitmap)
+            )
+            reset()
 //                userRepositoryViewModel.update(updateUser)
-                Toast.makeText(
-                    requireContext(),
-                    "Profile was successfully updated",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            Toast.makeText(
+                requireContext(),
+                "Profile was successfully updated",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
 
     private fun reset() {
         binding.apply {
@@ -122,9 +120,9 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showProfile() {
-        viewModel.getId().observe(viewLifecycleOwner) {
+//        viewModel.getId().observe(viewLifecycleOwner) {
 //            val user = userRepositoryViewModel.getUser(it)
-            binding.apply {
+        binding.apply {
 //                if (user.imageProfile != null) {
 //                    ivProfile.setImageBitmap(ImageHelper().convert(user.imageProfile))
 //                }
@@ -132,7 +130,6 @@ class ProfileFragment : Fragment() {
 //                edtFullName.setText(user.fullName)
 //                edtDateOfBirth.setText(user.dateOfBirth)
 //                edtAddress.setText(user.address)
-            }
         }
     }
 

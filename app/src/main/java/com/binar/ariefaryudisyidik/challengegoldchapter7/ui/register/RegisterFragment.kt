@@ -39,11 +39,13 @@ class RegisterFragment : Fragment() {
             val confirmPassword = edtConfirmPassword.text.toString()
 
             viewModel.insert(username, email, password, confirmPassword)
+
             viewModel.message.observe(viewLifecycleOwner) {
                 it.getContentIfNotHandled()?.let { message ->
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
             }
+
             viewModel.success.observe(viewLifecycleOwner) { success ->
                 if (success) {
                     reset()
