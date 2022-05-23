@@ -50,19 +50,14 @@ class LoginFragment : Fragment() {
             val password = edtPassword.text.toString()
 
             viewModel.login(email, password)
-
             viewModel.checkUser.observe(viewLifecycleOwner) { user ->
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(
-                        requireContext(), "Field cannot be empty",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else if (user == null) {
-                    Toast.makeText(requireContext(), "User does not exist", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
+                if (user != null) {
                     viewModel.saveUserDataStore(user.id, true)
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
+            }
+            viewModel.message.observe(viewLifecycleOwner) {
+                it.getContentIfNotHandled()?.let { message ->
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

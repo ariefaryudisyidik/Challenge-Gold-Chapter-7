@@ -6,6 +6,7 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.binar.ariefaryudisyidik.challengegoldchapter7.R
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.UserRepository
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.local.User
+import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.Event
 import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.UserDataStoreManager
 import kotlinx.coroutines.launch
 
@@ -17,11 +18,8 @@ class LoginViewModel(
     private var _checkUser = MutableLiveData<User>()
     val checkUser: LiveData<User> = _checkUser
 
-    private var _message = MutableLiveData<String>()
-    val message: LiveData<String> = _message
-
-    private var _success = MutableLiveData<Boolean>()
-    val success: LiveData<Boolean> = _success
+    private var _message = MutableLiveData<Event<String>>()
+    val message: LiveData<Event<String>> = _message
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -29,11 +27,10 @@ class LoginViewModel(
                 val data = repository.checkUser(email, password)
                 _checkUser.value = data
                 if (email.isEmpty() || password.isEmpty()) {
-                    _message.value = "Field cannot be empty"
-                } else if (data == null) {
-                    _message.value = "User does not exist"
+                    _message.value = Event("Field cannot be empty")
+                } else if (data.equals(null)) {
+                    _message.value = Event("User does not exist")
                 } else {
-                    _success.value = true
                     findNavController(LoginFragment()).navigate(R.id.action_loginFragment_to_homeFragment)
                 }
 
