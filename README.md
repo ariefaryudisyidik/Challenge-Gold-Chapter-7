@@ -1,16 +1,16 @@
-# Challenge-Silver-Chapter-6
+# Challenge-Silver-Chapter-7
 
 ## Delivery
-- Membangun sistem pengolahan data aplikasi lewat background process
-- Menerapkan struktur atau pola kode aplikasi dengan MVP / MVVM
-- Menerapkan sistem penyimpanan data lokal yang dengan Data Store 
-- Mampu melakukan pemrosesan salah satu tipe data dalam aplikasi
+- Mengembangkan aplikasi dengan menggunakan MVVM dan Dependency Injection
+- Menerapkan flavoring
+- Membaca performa aplikasi dalam memproses dan mentransfer data melalui Android Profiler
+- Menerapkan unit testing pada Aplikasi
 
 ## Criteria
-- Menerapkan proses pengolahan data di background menggunakan coroutine
-- Menerapkan design pattern MVVM/MVP dalam aplikasi android
-- Melakukan penyimpanan data lokal dengan Data store
-- Dapat menambahkan data berupa image
+- Menerapkan Dependency Injection
+- Menambahkan chucker untuk mengecek data ke API secara realtime
+- Melakukan testing untuk pengujian aplikasi
+- Menerapkan buildFlavoring
 
 ## Additional Resource
 - [Figma][0]

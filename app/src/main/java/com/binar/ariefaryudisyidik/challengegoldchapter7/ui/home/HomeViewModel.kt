@@ -35,15 +35,15 @@ class HomeViewModel(
         fetchData()
     }
 
+    fun getUserId(): LiveData<Int> {
+        return pref.getId().asLiveData()
+    }
+
     fun setUserId(id: Int) {
         viewModelScope.launch {
             val data = repository.getUser(id)
             _userData.value = data
         }
-    }
-
-    fun getUserId(): LiveData<Int> {
-        return pref.getId().asLiveData()
     }
 
     private fun fetchData() {

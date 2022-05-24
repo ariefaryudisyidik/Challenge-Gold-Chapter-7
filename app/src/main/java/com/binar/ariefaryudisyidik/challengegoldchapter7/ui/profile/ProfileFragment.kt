@@ -17,21 +17,16 @@ import com.binar.ariefaryudisyidik.challengegoldchapter7.R
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.local.User
 import com.binar.ariefaryudisyidik.challengegoldchapter7.databinding.FragmentProfileBinding
 import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.ImageHelper
-import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.UserDataStoreManager
-import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.UserPreferences
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-//    private val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
-
-    private lateinit var userPreferences: UserPreferences
-
-    //    private lateinit var viewModel: UserViewModel
-    private lateinit var pref: UserDataStoreManager
+    private val viewModel: ProfileViewModel by viewModel()
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private lateinit var bitmap: Bitmap
+    private var bitmap: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,26 +46,28 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-        userPreferences = UserPreferences(requireContext())
-        pref = UserDataStoreManager(requireContext())
-//        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
-
         showProfile()
 
-        binding.ivProfile.setOnClickListener {
-            openCamera()
+        viewModel.getUserId().observe(viewLifecycleOwner) {
+            viewModel.setUserId(it)
         }
 
-        binding.btnUpdate.setOnClickListener {
-            updateProfile()
+        viewModel.message.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
         }
 
-        binding.btnLogout.setOnClickListener {
-//            viewModel.logoutUser()
-            userPreferences.clearLoggedInUser()
-            findNavController().navigate(
-                R.id.action_profileFragment_to_loginFragment,
-            )
+        binding.apply {
+            ivProfile.setOnClickListener {
+                openCamera()
+            }
+            btnUpdate.setOnClickListener {
+                updateProfile()
+            }
+            btnLogout.setOnClickListener {
+                logout()
+            }
         }
     }
 
@@ -85,30 +82,35 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateProfile() {
-//        viewModel.getId().observe(viewLifecycleOwner) {
-
-//            val user = userRepositoryViewModel.getUser(it)
         binding.apply {
-            val updateUser = User(
-//                    id = user.id,
-//                    email = user.email,
-//                    password = user.password,
-                username = edtUsername.text.toString(),
-                fullName = edtFullName.text.toString(),
-                dateOfBirth = edtDateOfBirth.text.toString(),
-                address = edtAddress.text.toString(),
-                imageProfile = ImageHelper().convert(bitmap)
-            )
-            reset()
-//                userRepositoryViewModel.update(updateUser)
-            Toast.makeText(
-                requireContext(),
-                "Profile was successfully updated",
-                Toast.LENGTH_SHORT
-            ).show()
+            viewModel.userData.observe(viewLifecycleOwner) {
+                val user = it
+                val updateUser = User(
+                    id = user.id,
+                    email = user.email,
+                    password = user.password,
+                    username = edtUsername.text.toString(),
+                    fullName = edtFullName.text.toString(),
+                    dateOfBirth = edtDateOfBirth.text.toString(),
+                    address = edtAddress.text.toString(),
+                    imageProfile = user.imageProfile
+                )
+                @Suppress("SENSELESS_COMPARISON")
+                if (bitmap != null) {
+                    updateUser.imageProfile = ImageHelper().convert(bitmap!!)
+                }
+                viewModel.update(updateUser)
+                reset()
+            }
         }
     }
 
+    private fun logout() {
+        viewModel.clearLoginStatus()
+        findNavController().navigate(
+            R.id.action_profileFragment_to_loginFragment,
+        )
+    }
 
     private fun reset() {
         binding.apply {
@@ -120,16 +122,16 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showProfile() {
-//        viewModel.getId().observe(viewLifecycleOwner) {
-//            val user = userRepositoryViewModel.getUser(it)
-        binding.apply {
-//                if (user.imageProfile != null) {
-//                    ivProfile.setImageBitmap(ImageHelper().convert(user.imageProfile))
-//                }
-//                edtUsername.setText(user.username)
-//                edtFullName.setText(user.fullName)
-//                edtDateOfBirth.setText(user.dateOfBirth)
-//                edtAddress.setText(user.address)
+        viewModel.userData.observe(viewLifecycleOwner) { user ->
+            binding.apply {
+                if (user.imageProfile != null) {
+                    ivProfile.setImageBitmap(ImageHelper().convert(user.imageProfile))
+                }
+                edtUsername.setText(user.username)
+                edtFullName.setText(user.fullName)
+                edtDateOfBirth.setText(user.dateOfBirth)
+                edtAddress.setText(user.address)
+            }
         }
     }
 

@@ -18,7 +18,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="username">Username</string>
-    <string name="don_t_have_account">Don\'t have account?</string>
+    <string name="don_t_have_account">Don\'t have account? Register</string>
     <string name="profile">Profile</string>
     <string name="full_name">Nama Lengkap</string>
     <string name="date_of_birth">Tanggal Lahir</string>

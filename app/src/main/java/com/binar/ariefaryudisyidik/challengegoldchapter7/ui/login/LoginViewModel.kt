@@ -2,8 +2,6 @@ package com.binar.ariefaryudisyidik.challengegoldchapter7.ui.login
 
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import com.binar.ariefaryudisyidik.challengegoldchapter7.R
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.UserRepository
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.local.User
 import com.binar.ariefaryudisyidik.challengegoldchapter7.utils.Event
@@ -26,12 +24,11 @@ class LoginViewModel(
             try {
                 val data = repository.checkUser(email, password)
                 _checkUser.value = data
+                @Suppress("SENSELESS_COMPARISON")
                 if (email.isEmpty() || password.isEmpty()) {
                     _message.value = Event("Field cannot be empty")
-                } else if (data.equals(null)) {
+                } else if (data == null) {
                     _message.value = Event("User does not exist")
-                } else {
-                    findNavController(LoginFragment()).navigate(R.id.action_loginFragment_to_homeFragment)
                 }
 
             } catch (e: Exception) {

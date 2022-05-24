@@ -36,10 +36,9 @@ class UserDataStoreManager(private val context: Context) {
         }
     }
 
-    suspend fun logoutUser() {
+    suspend fun clearLoginStatus() {
         context.userDataStore.edit { pref ->
-            pref.remove(ID_KEY)
-            pref.remove(LOGIN_STATUS_KEY)
+            pref.clear()
         }
     }
 }
