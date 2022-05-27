@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.binar.ariefaryudisyidik.challengegoldchapter7.databinding.FragmentDetailBinding
 import com.binar.ariefaryudisyidik.challengegoldchapter7.ui.home.HomeAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 class DetailFragment : Fragment() {
 
@@ -34,9 +35,11 @@ class DetailFragment : Fragment() {
         binding.apply {
             Glide.with(requireView())
                 .load(HomeAdapter.posterBaseUrl + args.movie.backdropPath)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(ivBackdrop)
             Glide.with(requireView())
                 .load(HomeAdapter.posterBaseUrl + args.movie.posterPath)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(ivPoster)
             tvTitle.text = args.movie.title
             tvOverview.text = args.movie.overview

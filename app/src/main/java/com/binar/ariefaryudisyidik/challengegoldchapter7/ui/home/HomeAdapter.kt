@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.binar.ariefaryudisyidik.challengegoldchapter7.data.remote.response.Movie
 import com.binar.ariefaryudisyidik.challengegoldchapter7.databinding.ItemMovieBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 class HomeAdapter(private val listMovie: List<Movie>) :
     RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
@@ -40,7 +41,8 @@ class HomeAdapter(private val listMovie: List<Movie>) :
 
         Log.d("adapter", "onBindViewHolder: $poster")
         holder.binding.apply {
-            Glide.with(holder.itemView.context).load(poster).into(ivPoster)
+            Glide.with(holder.itemView.context).load(poster)
+                .transition(DrawableTransitionOptions.withCrossFade()).into(ivPoster)
             tvTitle.text = title
             tvReleaseDate.text = releaseDate
             tvAverageRating.text = averageRating
