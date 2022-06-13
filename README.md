@@ -1,4 +1,4 @@
-# Challenge-Silver-Chapter-7
+# Challenge-Gold-Chapter-7
 
 ## Delivery
 - Mengembangkan aplikasi dengan menggunakan MVVM dan Dependency Injection
